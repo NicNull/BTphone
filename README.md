@@ -27,7 +27,7 @@ Note: MACOS uses '-' and Ubuntu uses ':' as MAC address separator
 Copy script to /usr/local/bin/\
 Run ```crontab -e``` and add:
 ```bash
-* * * * *  /usr/local/bin/btphone.sh'
+* * * * *  /usr/local/bin/btphone.sh
 ```
 
 Check your RSSI level manually via ``btphone.sh -v`` and update the ``RSSIlevel=""`` parameter in the script somewhat higher.\
