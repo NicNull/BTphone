@@ -2,14 +2,14 @@
 Bluetooth RSSI phone monitor script to activate screen saver.\
 Script for MACOS and Ubuntu 18.04 to run periodically from crontab.
 
-## MACOS
+## MACOS (Tested on Catalina)
 Requires /usr/local/opt/blueutil/bin/blueutil via homebrew:
 ```bash
 brew install blueutil
 ```
 
 ## Ubuntu (Tested on 18.04)
-Requires hciutil:
+Requires hcitool and bluetoothctl:
 ```bash
 apt install bluez
 ```
