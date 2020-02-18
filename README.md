@@ -24,7 +24,7 @@ Ubuntu: Update the ```MAC="00:00:00:00:00:00"``` field in the script.\
 Note: MACOS uses '-' and Ubuntu uses ':' as MAC address separator
 ``
 
-Copy script to /usr/local/bin/\
+Copy script to /usr/local/bin/ and make sure that it is executable\
 Run ```crontab -e``` and add:
 ```bash
 * * * * *  /usr/local/bin/btphone.sh
