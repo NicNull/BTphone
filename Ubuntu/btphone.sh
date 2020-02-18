@@ -1,7 +1,7 @@
 #!/bin/bash
 ## Bluetooth phone presence script for Ubuntu 18.04 (xdg desktop) - called via cron each minute. (* * * * * /usr/local/bin/btphone.sh)
 ## https://github.com/NicNull/BTphone
-## Requires hciutil and bluetoothctl via 'apt install bluez'
+## Requires hcitool and bluetoothctl via 'apt install bluez'
 
 MAC="00:00:00:00:00:00"					#Phone BT MAC adr to monitor
 RSSIlevel="2"						#RSSI threshold for away status, depends on dongle - use 'btphone.sh -v' to manually assess return value
