@@ -18,11 +18,11 @@ apt install bluez
 Requires that a active phone pairing exists from MACOS/Ubuntu to enable RSSI polling.\
 Locate and write down your phone BT MAC address when you set up the pairing.
 
-MACOS:  Update the ```MAC="00-00-00-00-00-00"``` field in the script.\
-Ubuntu: Update the ```MAC="00:00:00:00:00:00"``` field in the script.\
-``
-Note: MACOS uses '-' and Ubuntu uses ':' as MAC address separator
-``
+Update the ```MAC="00:00:00:00:00:00"``` field in the script.\
+Set the number of loops per crontab call to scan for phone more than once a minute.\
+Default is ```LOOPS=1```.\
+Alternativly set ``POLL=1`` to continuosly scan for phone presence, this will ignore ``LOOPS`` setting.\
+To use longer cron call intervals update the ``TIMESLOT=60`` setting corresponding to your set crontab interval, converted to seconds.
 
 Copy script to /usr/local/bin/ and make sure that it is executable\
 Run ```crontab -e``` and add:
