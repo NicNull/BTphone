@@ -6,10 +6,28 @@
 btutil="/usr/local/opt/blueutil/bin/blueutil"
 
 MAC="00:00:00:00:00:00"							#Phone BT MAC to monitor, update with your MAC Address 
-RSSIlevel="78"								#RSSIlevel is the threshold value for activationg screen saver
-LOOPS=1 								#Used for script looping to decrease phone away detection  
+RSSIlevel="74"								#RSSIlevel is the threshold value for activationg screen saver
+LOOPS=6 								#Used for script looping to decrease phone away detection  
 POLL=0									#POLL=1 will poll BT RSSI continously with a 5s loop timeslot until Timeslot runs out. This ignores LOOPS setting  
 TIMESLOT=60								#Timeslot for exectution need to match crontab time interval
+PASSWD=""								#Base64 encoded password. Disable autologin by setting PASSWD="". 
+
+function unlock_screen {
+## Osascript for auto login, needs cron to be allowed in System Settings -> Security and Privacy -> Privacy -> Accessibility
+## To create it use 'base64<enter>MYPASSWORD<enter><ctrl-d>' to get a password string "TVlQQVNTV09SRAo="
+if [ "x$PASSWD" != "x" ]; then
+PWD=$(echo $PASSWD|base64 -d)
+osascript <<osaEOF
+	if application id "com.apple.ScreenSaver.Engine" is running then
+		delay 0.2
+		tell application "System Events" to key code 60 --Shift key to wake up scrsave
+		delay 0.2
+		tell application "System Events" to keystroke "$PWD"
+		tell application "System Events" to keystroke return
+	end if 
+osaEOF
+fi
+}
 
 if [ $POLL -eq 1 ]; then						
     WAIT=5 
@@ -33,7 +51,7 @@ for ((loop=1;loop<=LOOPS || POLL;loop++)); do
 	    echo -n "Connecting to: $MAC "
 	fi
 	for retry in {1..2}; do 
-	    init="`$btutil --connect $MAC 2>&1`"
+	    init=$($btutil --connect $MAC 2>&1)
 	    if [ "x$1" == "x-v" ]; then
 		echo -n "."
 	    fi
@@ -49,13 +67,13 @@ for ((loop=1;loop<=LOOPS || POLL;loop++)); do
 	done
 
 	if [ $CONNECTED ]; then
-	     result="`$btutil --info $MAC --format json-pretty --disconnect $MAC 2>&1`"
+	     result=$($btutil --info $MAC --format json-pretty --disconnect $MAC 2>&1)
 	     echo "result: [$result]" >> /tmp/btphone
 	else
 	     result="rawRSSI:-255,"
 	fi
 
-	RSSI="`echo "$result" |grep -i 'rawRSSI' |cut -f 2 -d '-' |cut -f 1 -d ','`"
+	RSSI=$(echo "$result" |grep -i 'rawRSSI' |cut -f 2 -d '-' |cut -f 1 -d ',')
 	if [ "x$RSSI" = "x" ]; then
 	    RSSI=255
 	fi
@@ -66,7 +84,9 @@ for ((loop=1;loop<=LOOPS || POLL;loop++)); do
 	    if [ -f /tmp/nophone ]; then
 		osascript -e "display notification \"Phone presence detected - RSSI: -$RSSI dB\" with title \"Phone Presence\""
 		rm /tmp/nophone
-	    fi 
+		## Auto login 
+	        unlock_screen
+            fi 
 	fi
 	if [ $RSSI -gt $RSSIlevel ]; then
 	    if [ ! -f /tmp/nophone ]; then
