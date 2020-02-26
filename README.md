@@ -21,7 +21,7 @@ Locate and write down your phone BT MAC address when you set up the pairing.
 Update the ```MAC="00:00:00:00:00:00"``` field in the script.\
 Set the number of loops per crontab call to scan for phone more than once a minute.\
 Default is ```LOOPS=1```.\
-Alternativly set ``POLL=1`` to continuosly scan for phone presence, this will ignore ``LOOPS`` setting.\
+Alternativly set ``POLL=1`` to continuously scan for phone presence, this will ignore ``LOOPS`` setting.\
 To use longer cron call intervals update the ``TIMESLOT=60`` setting corresponding to your set crontab interval, converted to seconds.
 
 Copy script to /usr/local/bin/ and make sure that it is executable\
